@@ -29,9 +29,9 @@ Object.keys(db).forEach((modelName) => {
 });
 
 db.sequelize
-  .sync({ force: true }) // `force: true` drops the table if it already exists
+  .sync()
   .then(() => {
-    console.log("Database & tables created!");
+    console.log("Database working");
   })
   .catch((error) => {
     console.error("Error creating database:", error);

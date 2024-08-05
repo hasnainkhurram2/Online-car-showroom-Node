@@ -3,12 +3,10 @@ const UserController = require("./../controller/userController");
 
 const router = express.Router();
 
-// router.param('id', tourController.checkID);
-
 router
   .route("/")
-  .get(UserController.getAllUsers)
-  .post(UserController.createUser);
+  .post(UserController.createUser)
+  .get(UserController.getAllUsers);
 
 router
   .route("/:id")

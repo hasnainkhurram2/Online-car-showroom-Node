@@ -21,40 +21,53 @@
 // };
 // const User = require("../models/user.js");
 const models = require("../models/index");
-const sequelize = require("sequelize");
 
+//done
 exports.getAllUsers = async (req, res) => {
   const temp = await models.User.findAll();
 
   res.status(200).json({
     status: "success",
-    requestedAt: req.requestTime,
     data: temp,
-
-    // data: {
-    //   d: `${temp}`,
-    // },
   });
 };
 
-exports.getUser = (req, res) => {};
+exports.getUser = async (req, res) => {
+  const _id = req.params.id;
+  try {
+    const temp = await models.User.findByPk(_id);
+    console.log(temp);
 
+    res.status(200).json({
+      data: temp,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "User not found",
+      error: error.message,
+    });
+  }
+};
+
+//done
 exports.createUser = async (req, res) => {
   try {
-    const bodyString = JSON.stringify(User);
-    console.log(`${User}`);
-
-    const newUser = await User.create({
-      name: req.body.name, // Use req.body data
-      age: req.body.age,
+    const newUser = await models.User.create({
+      id: req.body.id, // Use req.body data
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      username: req.body.username,
+      DOB: req.body.DOB,
+      email: req.body.email,
+      password: req.body.password,
+      role: req.body.role,
     });
 
     res.status(201).json({
       status: "success",
       message: "User created successfully",
-      data: {
-        user: "hello world",
-      },
+      data: newUser,
     });
   } catch (error) {
     res.status(500).json({
@@ -67,4 +80,24 @@ exports.createUser = async (req, res) => {
 
 exports.updateUser = (req, res) => {};
 
-exports.deleteUser = (req, res) => {};
+//done
+exports.deleteUser = async (req, res) => {
+  try {
+    await models.User.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    res.status(200).json({
+      status: "success",
+      message: `User with id: ${req.params.id} Deleted successfully`,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "User deletion failed",
+      error: error.message,
+    });
+  }
+};
